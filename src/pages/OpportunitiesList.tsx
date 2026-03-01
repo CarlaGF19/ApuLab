@@ -11,23 +11,28 @@ import {
   MapPin,
   Globe
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { StudentNavbar } from '@/components/layout/StudentNavbar';
 import { MOCK_OPPORTUNITIES } from '@/data/opportunities';
 import { cn } from '@/lib/utils';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 import { SteamArea, OpportunityType } from '@/types/opportunity';
 
 import { StudentLayout } from '@/components/layout/StudentLayout';
+import { LandingLayout } from '@/components/layout/LandingLayout';
+import { SEO } from '@/components/seo/SEO';
 
 export default function OpportunitiesList() {
-  const { user, toggleFavorite } = useAuthStore();
+  const { user, toggleFavorite, isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
   const [filterType, setFilterType] = useState<OpportunityType | 'Todos'>('Todos');
   const [filterArea, setFilterArea] = useState<SteamArea | 'Todas'>('Todas');
   const [filterStatus, setFilterStatus] = useState<'Todas' | 'Abiertas' | 'Próximas'>('Todas');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const isStudent = isAuthenticated && (user?.role === 'alumno' || user?.role === 'demo_alumno');
+  const Layout = isStudent ? StudentLayout : LandingLayout;
 
   const filteredOpportunities = MOCK_OPPORTUNITIES.filter(opp => {
     const matchesType = filterType === 'Todos' || opp.type === filterType;
@@ -40,6 +45,16 @@ export default function OpportunitiesList() {
   });
 
   const handleToggleFavorite = (id: string) => {
+    if (!isAuthenticated) {
+      toast.error('Inicia sesión para guardar favoritas', {
+        action: {
+          label: 'Login',
+          onClick: () => navigate('/login')
+        }
+      });
+      return;
+    }
+    
     const isFavorite = user?.favorites?.includes(id);
     toggleFavorite(id);
     if (!isFavorite) {
@@ -51,7 +66,11 @@ export default function OpportunitiesList() {
   };
 
   return (
-    <StudentLayout>
+    <Layout>
+      <SEO 
+        title="Oportunidades STEAM" 
+        description="Descubre concursos, hackathones y talleres para potenciar tu perfil STEAM." 
+      />
       <div className="max-w-7xl mx-auto px-6 pt-12 space-y-12 pb-20">
         {/* Header */}
         <div className="space-y-4">
@@ -171,6 +190,6 @@ export default function OpportunitiesList() {
           )}
         </div>
       </div>
-    </StudentLayout>
+    </Layout>
   );
 }

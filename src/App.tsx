@@ -21,6 +21,8 @@ import { Link } from 'react-router-dom';
 import { PilotModal } from '@/components/pilot/pilot-modal';
 import { PilotToast } from '@/components/pilot/pilot-toast';
 
+import { SEO } from '@/components/seo/SEO';
+
 const queryClient = new QueryClient();
 
 // Layout wrapper for landing pages
@@ -59,13 +61,39 @@ export default function App() {
         <Router>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<LandingLayout><Home /></LandingLayout>} />
-            <Route path="/familias" element={<LandingLayout><FamiliesLanding /></LandingLayout>} />
-            <Route path="/modelo-institucional" element={<LandingLayout><InstitutionalLanding /></LandingLayout>} />
+            <Route path="/" element={
+              <LandingLayout>
+                <SEO 
+                  title="ApuLab" 
+                  description="Plataforma gamificada con IA que detecta afinidades STEAM en niñas de primaria y las conecta con oportunidades reales." 
+                />
+                <Home />
+              </LandingLayout>
+            } />
+            <Route path="/familias" element={
+              <LandingLayout>
+                <SEO 
+                  title="Familias | ApuLab" 
+                  description="Descubre el potencial de tu hija con ApuLab. Herramientas para padres y tutores." 
+                />
+                <FamiliesLanding />
+              </LandingLayout>
+            } />
+            <Route path="/modelo-institucional" element={
+              <LandingLayout>
+                <SEO 
+                  title="Modelo Institucional | ApuLab" 
+                  description="Transforma la educación STEAM en tu colegio con nuestro modelo integral." 
+                />
+                <InstitutionalLanding />
+              </LandingLayout>
+            } />
             <Route path="/registro-familia" element={<FamilyRegistration />} />
             <Route path="/login" element={<LoginPage />} />
             
-            {/* Protected Routes */}
+            {/* Opportunities - Publicly accessible */}
+            <Route path="/oportunidades" element={<OpportunitiesList />} />
+            <Route path="/oportunidades/:id" element={<OpportunityDetail />} />
             <Route 
               path="/dashboard-docente" 
               element={
@@ -89,24 +117,6 @@ export default function App() {
               element={
                 <ProtectedRoute allowedRoles={['alumno', 'demo_alumno']}>
                   <StudentDashboard />
-                </ProtectedRoute>
-              } 
-            />
-
-            <Route 
-              path="/oportunidades" 
-              element={
-                <ProtectedRoute allowedRoles={['alumno', 'demo_alumno']}>
-                  <OpportunitiesList />
-                </ProtectedRoute>
-              } 
-            />
-
-            <Route 
-              path="/oportunidades/:id" 
-              element={
-                <ProtectedRoute allowedRoles={['alumno', 'demo_alumno']}>
-                  <OpportunityDetail />
                 </ProtectedRoute>
               } 
             />

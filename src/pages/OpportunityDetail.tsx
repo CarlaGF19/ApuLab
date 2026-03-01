@@ -14,18 +14,22 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { StudentNavbar } from '@/components/layout/StudentNavbar';
 import { MOCK_OPPORTUNITIES } from '@/data/opportunities';
 import { cn } from '@/lib/utils';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 import { StudentLayout } from '@/components/layout/StudentLayout';
+import { LandingLayout } from '@/components/layout/LandingLayout';
+import { SEO } from '@/components/seo/SEO';
 
 export default function OpportunityDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, toggleFavorite } = useAuthStore();
+  const { user, toggleFavorite, isAuthenticated } = useAuthStore();
   
+  const isStudent = isAuthenticated && (user?.role === 'alumno' || user?.role === 'demo_alumno');
+  const Layout = isStudent ? StudentLayout : LandingLayout;
+
   const opportunity = MOCK_OPPORTUNITIES.find(opp => opp.id === id);
 
   if (!opportunity) {
@@ -40,6 +44,16 @@ export default function OpportunityDetail() {
   const isFavorite = user?.favorites?.includes(opportunity.id);
 
   const handleToggleFavorite = () => {
+    if (!isAuthenticated) {
+      toast.error('Inicia sesión para guardar favoritas', {
+        action: {
+          label: 'Login',
+          onClick: () => navigate('/login')
+        }
+      });
+      return;
+    }
+
     toggleFavorite(opportunity.id);
     if (!isFavorite) {
       toast.success('Guardado en tus favoritas.', {
@@ -50,7 +64,11 @@ export default function OpportunityDetail() {
   };
 
   return (
-    <StudentLayout>
+    <Layout>
+      <SEO 
+        title={`${opportunity.title} | Oportunidades`}
+        description={opportunity.description}
+      />
       <div className="max-w-5xl mx-auto px-6 pt-12 space-y-10 pb-20">
         {/* Back Button */}
         <button 
@@ -209,6 +227,6 @@ export default function OpportunityDetail() {
           </div>
         </div>
       </div>
-    </StudentLayout>
+    </Layout>
   );
 }

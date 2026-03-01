@@ -77,8 +77,11 @@ export default function TeacherDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
 
   const handleLogout = () => {
-    logout();
     navigate('/login');
+    // Pequeño timeout para asegurar que la navegación ocurrió antes de limpiar el estado
+    setTimeout(() => {
+      logout();
+    }, 100);
   };
 
   return (

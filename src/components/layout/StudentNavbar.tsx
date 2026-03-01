@@ -31,8 +31,11 @@ export function StudentNavbar() {
   ];
 
   const handleLogout = () => {
-    logout();
     navigate('/login');
+    // Pequeño timeout para asegurar que la navegación ocurrió antes de limpiar el estado
+    setTimeout(() => {
+      logout();
+    }, 100);
   };
 
   return (
