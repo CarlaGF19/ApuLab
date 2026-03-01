@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", sans-serif;
+  
+  --color-background-base: #F5F6F8;
+  --color-background-card: #FFFFFF;
+  --color-background-card-alt: #FAF9FB;
+  
+  --color-primary: #92487A;
+  --color-primary-dark: #540863;
+  --color-primary-soft: #B76AA3;
+  --color-primary-glow: rgba(146, 72, 122, 0.08);
+  --color-primary-badge: #F6EFF8;
+  --color-primary-main: #92487A;
+
+  --color-text-primary: #2A1E2E;
+  --color-text-secondary: #6B6B75;
+  
+  --color-border-soft: #E8E6EC;
+  --color-success-accent: #4CAF8F;
+}
+
+@layer base {
+  html, body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: #F5F6F8;
+    color: #2A1E2E;
+    overflow-x: hidden;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #92487A;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #540863;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply text-[#92487A];
+  }
+  
+  .bg-gradient-main {
+    @apply bg-[#92487A];
+  }
+
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
+  }
+}
