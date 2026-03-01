@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Settings, 
@@ -67,6 +68,7 @@ const opportunitiesData = [
 ];
 
 export default function TeacherDashboard() {
+  const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const [activeTab, setActiveTab] = useState('identidad');
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -76,7 +78,7 @@ export default function TeacherDashboard() {
 
   const handleLogout = () => {
     logout();
-    window.location.href = '/login';
+    navigate('/login');
   };
 
   return (

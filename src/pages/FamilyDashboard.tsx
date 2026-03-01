@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Heart, Sparkles, Target, Star, Bell, Settings, LogOut, Search, Filter, BookOpen, Rocket, Calendar } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DemoBanner } from '@/components/layout/DemoBanner';
 
 export default function FamilyDashboard() {
+  const navigate = useNavigate();
   const { user, logout } = useAuthStore();
 
   const opportunities = [
@@ -43,7 +45,7 @@ export default function FamilyDashboard() {
 
         <div className="p-4 border-t border-border-soft">
           <button 
-            onClick={() => { logout(); window.location.href = '/'; }}
+            onClick={() => { logout(); navigate('/'); }}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-medium"
           >
             <LogOut className="w-5 h-5" /> Cerrar sesión
